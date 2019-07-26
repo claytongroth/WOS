@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "402107574681",
+    "firebase_url": "https://wayofspray-a7d78.firebaseio.com",
+    "project_id": "wayofspray-a7d78",
+    "storage_bucket": "wayofspray-a7d78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402107574681:android:b7205aa2a1c7c78f",
+        "android_client_info": {
+          "package_name": "com.claytongroth.wayofspray"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402107574681-idicieqhf3nlkuivjt732p2o2g9ghha9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcVlGDPgzyHWfvp27qFHV98lalaIDBf3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402107574681-idicieqhf3nlkuivjt732p2o2g9ghha9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

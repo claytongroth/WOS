@@ -1,4 +1,4 @@
-package com.invertase.rnfirebasestarter;
+package com.claytongroth.wayofspray;
 
 import android.support.multidex.MultiDexApplication;
 
@@ -24,6 +24,12 @@ import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.perf.RNFirebasePerformancePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
+//added
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.mapbox.rctmgl.RCTMGLPackage;
+
+
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +61,9 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         new RNFirebaseMessagingPackage(),
         new RNFirebaseNotificationsPackage(),
         new RNFirebasePerformancePackage(),
-        new RNFirebaseStoragePackage()
+        new RNFirebaseStoragePackage(),
+        new RNGestureHandlerPackage(),
+        new RCTMGLPackage()
       );
     }
 

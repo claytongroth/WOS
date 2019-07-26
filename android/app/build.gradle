@@ -107,7 +107,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.invertase.rnfirebasestarter"
+        applicationId "com.claytongroth.wayofspray"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -148,7 +148,10 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
+    // i added this
+    implementation project(path: ':react-native-gesture-handler')
+    implementation project(path: ':@react-native-mapbox-gl_maps')
+    //implementation project(':react-native-gesture-handler')
     /* ----------------------------
     *    REACT NATIVE FIREBASE
     * ---------------------------- */
