@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.google.firebase.firebase-perf"
 apply plugin: 'io.fabric'
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
 
@@ -151,6 +152,7 @@ dependencies {
     // i added this
     implementation project(path: ':react-native-gesture-handler')
     implementation project(path: ':@react-native-mapbox-gl_maps')
+    compile project(':react-native-vector-icons')
     //implementation project(':react-native-gesture-handler')
     /* ----------------------------
     *    REACT NATIVE FIREBASE

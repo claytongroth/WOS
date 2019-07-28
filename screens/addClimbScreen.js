@@ -1,5 +1,17 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, Button, TextInput, Keyboard, TouchableOpacity } from 'react-native';
+import { 
+  ScrollView,
+   StyleSheet,
+   Text,
+   View,
+   Button,
+   TextInput,
+   Keyboard,
+   TouchableOpacity
+} from 'react-native';
+import { Input } from 'react-native-elements'
+import BrushText from '../components/BrushText'
+
 
 export default class AddClimbScreen extends React.Component {
   constructor(props) {
@@ -30,65 +42,53 @@ export default class AddClimbScreen extends React.Component {
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <View>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Route name"
-          maxLength={20}
-          onBlur={Keyboard.dismiss}
-          value={this.state.name}
-          onChangeText={this.handleNameChange}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Coordinates"
-          maxLength={20}
-          onBlur={Keyboard.dismiss}
-          value={this.state.location}
-          onChangeText={this.handleNameChange}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Area"
-          maxLength={20}
-          onBlur={Keyboard.dismiss}
-          value={this.state.area}
-          onChangeText={this.handleNameChange}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="V7"
-          maxLength={20}
-          onBlur={Keyboard.dismiss}
-          value={this.state.grade}
-          onChangeText={this.handleNameChange}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Notes here..."
-          maxLength={20}
-          onBlur={Keyboard.dismiss}
-          value={this.state.notes}
-          onChangeText={this.handleNameChange}
-        />
+      <ScrollView>
+        <Input label={"Climb Name"} errorMessage={"Name Invalid"} onChangeText={this.handleNameChange}/>
+        <Input label={"Coordinates"} errorMessage={"Coordinates Invalid"} onChangeText={this.handleNameChange}/>
+        <Input label={"Area"} errorMessage={"Area Invalid"} onChangeText={this.handleNameChange}/>
+        <Input label={"Grade"} errorMessage={"Grade Invalid"} onChangeText={this.handleNameChange}/>      
+        <Input label={"Notes"} errorMessage={"Notes Invalid"} onChangeText={this.handleNameChange}/>    
         <TouchableOpacity
-          style={styles.imageButton}
           onPress={this.handleImageAdd}
         >
-          <Text style={styles.imageButtonText}>Select an Image</Text>
+                    <View style={styles.brush}>
+            <BrushText
+              image= {
+                 __DEV__
+                  ? require('../assets/images/BrushMaroon.png')
+                  : require('../assets/images/BrushMaroon.png')
+              }
+              text = "Select an Image"
+              fsize = {30}
+            />
+          </View>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={{marginTop: 5}}
+          onPress={() => navigate('Draw')}
+        >
+          <View style={styles.brush}>
+            <BrushText
+              image= {
+                 __DEV__
+                  ? require('../assets/images/BrushMoss.png')
+                  : require('../assets/images/BrushMoss.png')
+              }
+              text = "Draw Climb"
+              fsize = {30}
+            />
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.saveButton}
           onPress={this.handleSubmit}
         >
-          <Text style={styles.saveButtonText}>Save</Text>
+          <Text style={styles.imageButtonText}>Submit</Text>   
         </TouchableOpacity>
-        <Button
-          title="Draw Climb"
-          onPress={() => navigate('Draw')}
-        />
-      </View>
+
+      </ScrollView>
     );
   }
 }
@@ -102,6 +102,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     paddingLeft: 20,
     paddingRight: 20
+  },
+  brush: {
+    height: 60,
+    width: 350,
+    resizeMode: 'contain'
   },
   saveButton: {
     borderWidth: 1,

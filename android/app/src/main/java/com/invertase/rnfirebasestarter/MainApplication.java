@@ -27,6 +27,7 @@ import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 //added
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.mapbox.rctmgl.RCTMGLPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 
 
 
@@ -63,7 +64,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         new RNFirebasePerformancePackage(),
         new RNFirebaseStoragePackage(),
         new RNGestureHandlerPackage(),
-        new RCTMGLPackage()
+        new RCTMGLPackage(),
+        new VectorIconsPackage()
       );
     }
 

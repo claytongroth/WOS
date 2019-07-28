@@ -16,7 +16,7 @@ export default class BrushText extends React.Component {
            justifyContent: 'center',
            alignItems: 'center'
          }}>
-           <Text style={{color: '#fcfaf9', fontSize: 50}}>{this.props.text}</Text>
+           <Text style={{color: '#fcfaf9', fontSize: this.props.fsize}}>{this.props.text}</Text>
          </View>
       </ImageBackground>
     );

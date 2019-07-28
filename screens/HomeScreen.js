@@ -12,12 +12,6 @@ import {
 } from 'react-native';
 import BrushText from '../components/BrushText';
 
-
-// Initialize Firebase moved to app js
-
-
-
-
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -35,6 +29,7 @@ export default class HomeScreen extends React.Component {
                   : require('../assets/images/BrushCoral.png')
               }
               text = "App Title"
+              fsize = {50}
             />
           </View>
 
