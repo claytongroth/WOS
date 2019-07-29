@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View, Button, TextInput, Keyboard, Toucha
 export default class AddClimbScreen extends React.Component {
   constructor(props) {
   super(props);
-//  this.ref = firebase.firestore().collection('');
+  this.ref = firebase.firestore().collection('climbs');
   this.state = {
     name: '',
     location: '',
@@ -21,15 +21,13 @@ export default class AddClimbScreen extends React.Component {
   handleNameChange(name){
      this.setState({ name: name})
   }
-  handleSubmit(){
-//    this.ref.add({
-//     title: this.state.textInput,
-//     property2: this.state.whatever,
-//     etc: etc,
-//    })
-//    this.setState({
-//     textInput: '',
-//    })
+  handleSubmit = () => {
+    this.ref.add({
+     ...state
+    })
+    this.setState({
+     textInput: '',
+    })
    
   }
   handleImageAdd(){

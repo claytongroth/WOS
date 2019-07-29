@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
-import Login from './screens/Login';
 
 export default class App extends React.Component {
   constructor() {
@@ -26,10 +25,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    if (!this.state.user) {
-        return <Login>
-    }
-  
     return (
       <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}

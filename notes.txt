@@ -1,0 +1,1 @@
+TO attach filepath to the form submit make a form field and set it to the localstorage dir fro camera roll, or whatever. There could possibly be a dropdown populated by current contents
