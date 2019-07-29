@@ -18,6 +18,7 @@ import {bouldGrades, routeGrades} from '../constants/Grades'
 export default class AddClimbScreen extends React.Component {
   constructor(props) {
   super(props);
+//  this.ref = firebase.firestore().collection('');
   this.state = {
     name: '',
     location: [],
@@ -37,10 +38,25 @@ export default class AddClimbScreen extends React.Component {
      this.setState({ name: name})
   }
   handleSubmit(){
-    //
+//    this.ref.add({
+//     title: this.state.textInput,
+//     property2: this.state.whatever,
+//     etc: etc,
+//    })
+//    this.setState({
+//     textInput: '',
+//    })
+   
   }
   handleImageAdd(){
-    //
+//    firebase
+//        .storage
+//        .ref('pathTo/uploadName.jpeg')
+//        .putFile(
+//            `${firebase.storage.Native.DOUMENT_DIRECTORY_PATH}/name.jpeg`
+//        )
+//       .then(successCb)
+//        .catch(failureCb);
   }
 
   render() {
