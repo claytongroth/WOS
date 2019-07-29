@@ -7,10 +7,12 @@ import {
    Button,
    TextInput,
    Keyboard,
-   TouchableOpacity
+   TouchableOpacity,
+   Picker
 } from 'react-native';
-import { Input } from 'react-native-elements'
+import { Input, CheckBox, Icon } from 'react-native-elements'
 import BrushText from '../components/BrushText'
+import {bouldGrades, routeGrades} from '../constants/Grades'
 
 
 export default class AddClimbScreen extends React.Component {
@@ -18,10 +20,12 @@ export default class AddClimbScreen extends React.Component {
   super(props);
   this.state = {
     name: '',
-    location: '',
+    location: [],
     area: '',
     grade: '',
-    notes:''
+    notes:'',
+    isBoulder:true,
+    checked: false
 
   }
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -44,9 +48,39 @@ export default class AddClimbScreen extends React.Component {
     return (
       <ScrollView>
         <Input label={"Climb Name"} errorMessage={"Name Invalid"} onChangeText={this.handleNameChange}/>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <CheckBox
+            style = {{flexGrow:1}}
+            iconRight
+            right = {true}
+            title='Route'
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checked={!this.state.isBoulder}
+            onPress={()=>this.setState({isBoulder: !this.state.isBoulder})}
+          />
+          <CheckBox
+            style = {{flexGrow:1}}
+            iconRight
+            title='Boulder'
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checked={this.state.isBoulder}
+            onPress={()=>this.setState({isBoulder: !this.state.isBoulder})}
+          />
+        </View>
         <Input label={"Coordinates"} errorMessage={"Coordinates Invalid"} onChangeText={this.handleNameChange}/>
         <Input label={"Area"} errorMessage={"Area Invalid"} onChangeText={this.handleNameChange}/>
-        <Input label={"Grade"} errorMessage={"Grade Invalid"} onChangeText={this.handleNameChange}/>      
+        <Text>Grade</Text>
+        <Picker
+          selectedValue={bouldGrades[0]}
+          style={{height: 50, width: '100%', backgroundColor:"rgba(252, 250, 249, 1)", border: "1px solid black" }}
+          onValueChange={(itemValue, itemIndex) => this.setState({grade: itemValue})}
+        >
+          {this.state.isBoulder ? 
+            bouldGrades.map(x => <Picker.Item key= {x} label={x} value={x} />) :
+            routeGrades.map(x => <Picker.Item key={x} label={x} value={x} />)}
+        </Picker>    
         <Input label={"Notes"} errorMessage={"Notes Invalid"} onChangeText={this.handleNameChange}/>    
         <TouchableOpacity
           onPress={this.handleImageAdd}
@@ -82,10 +116,20 @@ export default class AddClimbScreen extends React.Component {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.saveButton}
+          style={{marginTop: 5}}
           onPress={this.handleSubmit}
         >
-          <Text style={styles.imageButtonText}>Submit</Text>   
+          <View style={styles.brush}>
+            <BrushText
+              image= {
+                 __DEV__
+                  ? require('../assets/images/BrushPurp.png')
+                  : require('../assets/images/BrushPurp.png')
+              }
+              text = "Submit ✅"
+              fsize = {30}
+            />
+          </View>
         </TouchableOpacity>
 
       </ScrollView>
