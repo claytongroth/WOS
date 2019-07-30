@@ -16,7 +16,7 @@ export default class ViewClimbScreen extends React.Component {
   }
 }
 
-handleImgDownload {
+handleImgDownload = () => {
  //firebase
  //     .storage()
  //     .ref('/uploadOk.jpeg')
