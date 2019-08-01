@@ -22,9 +22,6 @@ export default class MapScreen extends React.Component {
             <Text style={styles.addText}>Add Climb</Text>
           </TouchableOpacity>
       </View>
-
- 
- 
     );
   }
 }

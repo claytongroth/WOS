@@ -1,149 +1,160 @@
 import React from 'react';
-import { 
+import {
   ScrollView,
-   StyleSheet,
-   Text,
-   View,
-   Button,
-   TextInput,
-   Keyboard,
-   TouchableOpacity,
-   Picker
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  Keyboard,
+  TouchableOpacity,
+  Picker
 } from 'react-native';
 import { Input, CheckBox, Icon } from 'react-native-elements'
 import BrushText from '../components/BrushText'
-import {bouldGrades, routeGrades} from '../constants/Grades'
+import { bouldGrades, routeGrades } from '../constants/Grades'
+import validateform from '../auth/ValidateForm'
+import firebase from 'react-native-firebase';
 
+const initialState = {
+  name: 'Test1',
+  location: [44.44, -95.99],
+  area: 'Test Area1',
+  grade: 'V0',
+  notes: 'test 1',
+  isBoulder: true,
+  checked: false
+}
 
 export default class AddClimbScreen extends React.Component {
   constructor(props) {
-  super(props);
-//  this.ref = firebase.firestore().collection('');
-  this.state = {
-    name: '',
-    location: [],
-    area: '',
-    grade: '',
-    notes:'',
-    isBoulder:true,
-    checked: false
-
-  }
+    super(props);
+    this.ref = firebase.firestore().collection('climbs');
+    this.state = { ...initialState };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
   static navigationOptions = {
     title: 'Add',
   };
-  handleNameChange(name){
-     this.setState({ name: name})
+  handleNameChange(name) {
+    this.setState({ name: name })
   }
-  handleSubmit(){
-//    this.ref.add({
-//     title: this.state.textInput,
-//     property2: this.state.whatever,
-//     etc: etc,
-//    })
-//    this.setState({
-//     textInput: '',
-//    })
-   
+  validate = (obj) => {
+    const { errors } = validateform(obj);
+    return new Promise(function (resolve, reject) {
+      if (Object.entries(errors).length > 0) {
+        reject(`Errors Submitting: ${errors}`)
+      } else {
+        resolve("Submitted climb!")
+      }
+    })
   }
-  handleImageAdd(){
-//    firebase
-//        .storage
-//        .ref('pathTo/uploadName.jpeg')
-//        .putFile(
-//            `${firebase.storage.Native.DOUMENT_DIRECTORY_PATH}/name.jpeg`
-//        )
-//       .then(successCb)
-//        .catch(failureCb);
+  handleSubmit = () => {
+    this.validate(this.state)
+      .then(this.ref.add({...this.state}) && alert("Success!"))
+      //.then(() => alert("Submitted Climb!"))
+      .catch((err) => alert(err))
+    this.setState({ ...initialState })
   }
-
+  handleImageAdd() {
+    firebase
+      .storage
+      .ref('pathTo/uploadName.jpeg')
+      .putFile(
+        `${firebase.storage.Native.DOCUMENT_DIRECTORY_PATH}/name.jpeg`
+      )
+      .then(successCb)
+      .catch(failureCb);
+  }
   render() {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     return (
       <ScrollView>
-        <Input label={"Climb Name"} errorMessage={"Name Invalid"} onChangeText={this.handleNameChange}/>
-        <View style={{flex: 1, flexDirection: 'row'}}>
+        <Input
+          placeholder={'Climb Name'}
+          label={"Climb Name"}
+          onChangeText={this.handleNameChange}
+        />
+        <View style={{ flex: 1, flexDirection: 'row' }}>
           <CheckBox
-            style = {{flexGrow:1}}
+            style={{ flexGrow: 1 }}
             iconRight
-            right = {true}
+            right={true}
             title='Route'
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checked={!this.state.isBoulder}
-            onPress={()=>this.setState({isBoulder: !this.state.isBoulder})}
+            onPress={() => this.setState({ isBoulder: !this.state.isBoulder })}
           />
           <CheckBox
-            style = {{flexGrow:1}}
+            style={{ flexGrow: 1 }}
             iconRight
             title='Boulder'
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checked={this.state.isBoulder}
-            onPress={()=>this.setState({isBoulder: !this.state.isBoulder})}
+            onPress={() => this.setState({ isBoulder: !this.state.isBoulder })}
           />
         </View>
-        <Input label={"Coordinates"} errorMessage={"Coordinates Invalid"} onChangeText={this.handleNameChange}/>
-        <Input label={"Area"} errorMessage={"Area Invalid"} onChangeText={this.handleNameChange}/>
+        <Input placeholder={'My Location'} label={"Coordinates"} onChangeText={(x) => this.setState({ location: [x] })} />
+        <Input placeholder={'Area Name'} label={"Area"} onChangeText={(x) => this.setState({ area: x })} />
         <Text>Grade</Text>
         <Picker
-          selectedValue={bouldGrades[0]}
-          style={{height: 50, width: '100%', backgroundColor:"rgba(252, 250, 249, 1)", border: "1px solid black" }}
-          onValueChange={(itemValue, itemIndex) => this.setState({grade: itemValue})}
+          selectedValue={this.state.grade}
+          style={{ height: 50, width: '100%', backgroundColor: "rgba(252, 250, 249, 1)", border: "1px solid black" }}
+          onValueChange={(itemValue, itemIndex) => this.setState({ grade: itemValue })}
         >
-          {this.state.isBoulder ? 
-            bouldGrades.map(x => <Picker.Item key= {x} label={x} value={x} />) :
+          {this.state.isBoulder ?
+            bouldGrades.map(x => <Picker.Item key={x} label={x} value={x} />) :
             routeGrades.map(x => <Picker.Item key={x} label={x} value={x} />)}
-        </Picker>    
-        <Input label={"Notes"} errorMessage={"Notes Invalid"} onChangeText={this.handleNameChange}/>    
+        </Picker>
+        <Input label={"Notes"} onChangeText={(x) => this.setState({ notes: x })} />
         <TouchableOpacity
           onPress={this.handleImageAdd}
         >
-                    <View style={styles.brush}>
+          <View style={styles.brush}>
             <BrushText
-              image= {
-                 __DEV__
+              image={
+                __DEV__
                   ? require('../assets/images/BrushMaroon.png')
                   : require('../assets/images/BrushMaroon.png')
               }
-              text = "Select an Image"
-              fsize = {30}
-            />
-          </View>
-        </TouchableOpacity>
-        
-        <TouchableOpacity
-          style={{marginTop: 5}}
-          onPress={() => navigate('Draw')}
-        >
-          <View style={styles.brush}>
-            <BrushText
-              image= {
-                 __DEV__
-                  ? require('../assets/images/BrushMoss.png')
-                  : require('../assets/images/BrushMoss.png')
-              }
-              text = "Draw Climb"
-              fsize = {30}
+              text="Select an Image"
+              fsize={30}
             />
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{marginTop: 5}}
-          onPress={this.handleSubmit}
+          style={{ marginTop: 5 }}
+          onPress={() => navigate('Draw')}
         >
           <View style={styles.brush}>
             <BrushText
-              image= {
-                 __DEV__
+              image={
+                __DEV__
+                  ? require('../assets/images/BrushMoss.png')
+                  : require('../assets/images/BrushMoss.png')
+              }
+              text="Draw Climb"
+              fsize={30}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ marginTop: 5 }}
+          onPress={() => this.handleSubmit()}
+        >
+          <View style={styles.brush}>
+            <BrushText
+              image={
+                __DEV__
                   ? require('../assets/images/BrushPurp.png')
                   : require('../assets/images/BrushPurp.png')
               }
-              text = "Submit ✅"
-              fsize = {30}
+              text="Submit ✅"
+              fsize={30}
             />
           </View>
         </TouchableOpacity>
