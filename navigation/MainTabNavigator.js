@@ -9,10 +9,13 @@ import MapScreen from '../screens/MapScreen';
 import AddClimbScreen from '../screens/addClimbScreen';
 import DrawClimbScreen from '../screens/DrawClimbScreen';
 import ViewClimbScreen from '../screens/ViewClimbScreen';
-
+import SignUp from '../screens/SignUp';
+import Login from '../screens/Login';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Login: Login,
+  SignUp: SignUp
 });
 
 HomeStack.navigationOptions = {

@@ -9,15 +9,42 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button
 } from 'react-native';
 import BrushText from '../components/BrushText';
+import firebase from 'react-native-firebase';
+import Login from './Login';
+
+
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header: null,
+  constructor() {
+    super();
+    this.unsubscriber = null
+    this.state = {
+        user : null
+    };
+  }
+  static navigationOptions = { 
+    title: 'Home',
+    header: null
   };
-
+  async componentDidMount() {
+    this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
+        this.setState({ user })
+    })
+  }
+  componentWillMount() {
+    if (this.unsubscriber) {
+        this.unsubscriber();
+    }
+  }
   render() {
+    const {navigation} = this.props;
+    if (!this.state.user) {
+      // TODO get login to actually precede app
+      return <Login navigation={navigation}/>
+    }
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -32,15 +59,20 @@ export default class HomeScreen extends React.Component {
               fsize = {50}
             />
           </View>
-
           <View style={styles.getStartedContainer}>
             <Text style={styles.getStartedText}>
               An app for sharing climbs without threatening access.
             </Text>
             <Text style={styles.getStartedText}>
-              Here the user's personal info will show as well as recent areas.
+              {`Welcome ${JSON.stringify(this.state.user.displayName, null, 2)}`}
             </Text>
-
+            { this.state.user &&
+              <Button
+              style={{marginTop: 10}}
+              title="Sign Out"
+              onPress={() => firebase.auth().signOut()} 
+              />
+            }
           </View>
         </ScrollView>
       </View>

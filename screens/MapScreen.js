@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import MapboxGL from "@react-native-mapbox-gl/maps";
+import firebase from 'react-native-firebase';
 
 MapboxGL.setAccessToken("pk.eyJ1IjoiY2dyb3RoIiwiYSI6ImNqZ2w4bWY5dTFueG0zM2w0dTNkazI1aWEifQ.55SWFVBYzs08EqJHAa3AsQ");
 

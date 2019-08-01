@@ -35,13 +35,12 @@ export default class AddClimbScreen extends React.Component {
   static navigationOptions = {
     title: 'Add',
   };
-  handleNameChange(name) {
-    this.setState({ name: name })
-  }
   validate = (obj) => {
+    // TODO hadnle validate promise
     const { errors } = validateform(obj);
+    alert(errors)
     return new Promise(function (resolve, reject) {
-      if (Object.entries(errors).length > 0) {
+      if (Object.entries(errors).length) {
         reject(`Errors Submitting: ${errors}`)
       } else {
         resolve("Submitted climb!")
@@ -49,9 +48,13 @@ export default class AddClimbScreen extends React.Component {
     })
   }
   handleSubmit = () => {
-    this.validate(this.state)
-      .then(this.ref.add({...this.state}) && alert("Success!"))
-      //.then(() => alert("Submitted Climb!"))
+    // this.validate(this.state)
+    //   .then(this.ref.add({...this.state}) && alert("Success!"))
+    //   //.then(() => alert("Submitted Climb!"))
+    //   .catch((err) => alert(err))
+    // this.setState({ ...initialState })
+    this.ref.add({...this.state})
+      .then(() => alert("Submitted Climb!"))
       .catch((err) => alert(err))
     this.setState({ ...initialState })
   }
@@ -72,7 +75,7 @@ export default class AddClimbScreen extends React.Component {
         <Input
           placeholder={'Climb Name'}
           label={"Climb Name"}
-          onChangeText={this.handleNameChange}
+          onChangeText={(name) => this.setState({ name: name })}
         />
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <CheckBox
