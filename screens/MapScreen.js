@@ -72,13 +72,13 @@ export default class MapScreen extends React.Component {
 
         <MapboxGL.MapView style={styles.map} />
         //add thing to make markers, click what to to go to climbView
-        <Layer>
+        >
           {this.state.climbs.map(x =>
-            <Feature
-              coordinates={[x.location[0], x.location[1]]}
+            <MapboxGL.PointAnnotation
+              coordinate={[x.location[0], x.location[1]]}
               onClick={this.setState({ theSwitch: true })} />
           )}
-        </Layer>
+        
         <TouchableOpacity
           style={styles.add}
           onPress={() => navigate('Add')}
