@@ -30,7 +30,8 @@ export default class MapScreen extends React.Component {
     querySnapshot.forEach((doc) => {
       const { title, location } = doc.data();
 
-      climbs.push({
+      climbs.push({\
+        
         key: doc.id,
         doc, // DocumentSnapshot
         title,
