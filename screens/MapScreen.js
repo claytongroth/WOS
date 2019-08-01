@@ -8,50 +8,85 @@ export default class MapScreen extends React.Component {
   static navigationOptions = {
     title: 'Map',
   };
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection('climbs');
+    this.unsubscribe = null;
+
+    this.state = {
+      loading: true,
+      climbs: [],
+    };
+  }
+  componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate)
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  onCollectionUpdate = (querySnapshot) => {
+    const climbs = [];
+    querySnapshot.forEach((doc) => {
+      const { title, location } = doc.data();
+
+      climbs.push({
+        key: doc.id,
+        doc, // DocumentSnapshot
+        title,
+        location,
+      });
+    });
+
+    this.setState({
+      climbs,
+      loading: false,
+    });
+  }
 
   render() {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     return (
-      
+
       <View style={styles.page}>
-          <MapboxGL.MapView style={styles.map} />
-          <TouchableOpacity
-            style={styles.add}
-            onPress={() => navigate('Add')}
-          >
-            <Text style={styles.addText}>Add Climb</Text>
-          </TouchableOpacity>
+        <MapboxGL.MapView style={styles.map} />
+        <TouchableOpacity
+          style={styles.add}
+          onPress={() => navigate('Add')}
+        >
+          <Text style={styles.addText}>Add Climb</Text>
+        </TouchableOpacity>
       </View>
 
- 
- 
+
+
     );
   }
 }
 
 const styles = StyleSheet.create({
-    page: {
-      flex: 1,
-    },
-    map: {
-      flex: 1,
-      ...StyleSheet.absoluteFillObject,
-    },
-   add: {
+  page: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+    ...StyleSheet.absoluteFillObject,
+  },
+  add: {
     position: 'absolute',//use absolute position to show button on top of the map
     top: '84%', //for center align
     alignSelf: 'flex-end',//for align to right
     backgroundColor: '#ff3c38',
-    borderWidth:1,
-    borderColor:'rgba(0,0,0,0.2)',
-    alignItems:'center',
-    justifyContent:'center',
-    width:80,
-    height:80,
-    borderRadius:40,
-   },
-   addText: {
-     color: '#fcfaf9',
-     fontSize: 20
-   }
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  addText: {
+    color: '#fcfaf9',
+    fontSize: 20
+  }
 });
