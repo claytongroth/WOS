@@ -28,10 +28,9 @@ const initialState = {
 
 export default class AddClimbScreen extends React.Component {
   constructor(props) {
-    super(props);
-    this.ref = firebase.firestore().collection('climbs');
-    this.state = { ...initialState };
-    this.handleNameChange = this.handleNameChange.bind(this);
+  super(props);
+  this.ref = firebase.firestore().collection('climbs');
+  this.state = {...initialState};
   }
   static navigationOptions = {
     title: 'Add',
