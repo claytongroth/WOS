@@ -1,7 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import MapboxGL from "@react-native-mapbox-gl/maps";
-import Feature from "react-mapbox-gl"
+import {Feature, Layer} from "@react-native-mapbox-gl/maps";
+import firebase from 'react-native-firebase';
 
 MapboxGL.setAccessToken("pk.eyJ1IjoiY2dyb3RoIiwiYSI6ImNqZ2w4bWY5dTFueG0zM2w0dTNkazI1aWEifQ.55SWFVBYzs08EqJHAa3AsQ");
 
@@ -18,7 +19,7 @@ export default class MapScreen extends React.Component {
     this.state = {
       loading: true,
       climbs: [],
-      theSwitch: false
+      showMap: true
     };
   }
 
@@ -65,36 +66,33 @@ export default class MapScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    return (this.state.theSwitch ?
-
-      <View style={styles.page}>
-
-        <MapboxGL.MapView style={styles.map} />
-        //add thing to make markers, click what to to go to climbView
-        <Layer>
-          {this.state.climbs.map(x =>
-            <Feature
-              coordinates={[x.location[0], x.location[1]]}
-              onClick={this.setState({ theSwitch: true })} />
-          )}
-        </Layer>
-        <TouchableOpacity
-          style={styles.add}
-          onPress={() => navigate('Add')}
-        >
-          <Text style={styles.addText}>Add Climb</Text>
-        </TouchableOpacity>
-      </View>
+    return (
+      this.state.showMap ?
+        <View style={styles.page}>
+          <MapboxGL.MapView style={styles.map}>
+              <Layer>
+                {this.state.climbs.map(x =>
+                  <Feature
+                    coordinates={[x.location[0], x.location[1]]}
+                    onClick={() => this.setState({ showMap: true })} />
+                )}
+              </Layer>
+          </MapboxGL.MapView>
+          <TouchableOpacity
+                style={styles.add}
+                onPress={() => navigate('Add')}
+              >
+                <Text style={styles.addText}>Add Climb</Text>
+            </TouchableOpacity>
+        </View>
       :
-      <View>
-        <Img>path to downloaded image</Img>
-        <scrollView>
-          <Text>...</Text>
-        </scrollView>
-        <Button onClick={this.setState({ theSwitch : false })} />
-      </View>
-
-
+        <View>
+          <Text>IMAGE HERE: path to downloaded image</Text>
+          <ScrollView>
+            <Text>...</Text>
+          </ScrollView>
+          <Button title="X" onClick={() => this.setState({ showMap : false })}>X</Button>
+        </View>
     );
   }
 }
