@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, Text, View, Button, TouchableOpacity, Image } f
 import MapboxGL from "@react-native-mapbox-gl/maps";
 import {Feature, Layer} from "@react-native-mapbox-gl/maps";
 import firebase from 'react-native-firebase';
+import marker from '../assets/images/marker.png';
+import BrushText from '../components/BrushText';
 
 MapboxGL.setAccessToken("pk.eyJ1IjoiY2dyb3RoIiwiYSI6ImNqZ2w4bWY5dTFueG0zM2w0dTNkazI1aWEifQ.55SWFVBYzs08EqJHAa3AsQ");
 
@@ -19,7 +21,8 @@ export default class MapScreen extends React.Component {
     this.state = {
       loading: true,
       climbs: [],
-      showMap: true
+      showMap: true,
+      popUp: null
     };
   }
 
@@ -34,13 +37,16 @@ export default class MapScreen extends React.Component {
   onCollectionUpdate = (querySnapshot) => {
     const climbs = [];
     querySnapshot.forEach((doc) => {
-      const { title, location } = doc.data();
+      const { name, location, grade, notes, area } = doc.data();
 
       climbs.push({
         key: doc.id,
         doc, // DocumentSnapshot
-        title,
+        name,
         location,
+        grade,
+        notes,
+        area
 
       });
     });
@@ -62,37 +68,96 @@ export default class MapScreen extends React.Component {
     //     .catch(failureCb);
 
   }
-
+  onSourceLayerPress = (e) => {
+    const {name, grade, area, notes} = e.nativeEvent.payload.properties;
+    this.setState({
+      showMap: false,
+      popUp: {
+        name: name,
+        grade: grade,
+        area: area,
+        notes: notes,
+        imgURL: "Nothing yet"
+      }
+    })
+  }
 
   render() {
     const { navigate } = this.props.navigation;
+    const { climbs, popUp} = this.state;
     return (
       this.state.showMap ?
-        <View style={styles.page}>
-          <MapboxGL.MapView style={styles.map}>
-              <Layer>
-                {this.state.climbs.map(x =>
-                  <Feature
-                    coordinates={[x.location[0], x.location[1]]}
-                    onClick={() => this.setState({ showMap: true })} />
-                )}
-              </Layer>
-          </MapboxGL.MapView>
-          <TouchableOpacity
-                style={styles.add}
-                onPress={() => navigate('Add')}
-              >
-                <Text style={styles.addText}>Add Climb</Text>
-            </TouchableOpacity>
-        </View>
+
+      <View style={styles.page}>
+        <MapboxGL.MapView 
+          style={styles.map}
+          styleURL={MapboxGL.StyleURL.Satellite}
+          centerCoordinate={[-105.8214,39.6428]}
+        >
+          {climbs.map(x =>
+            <MapboxGL.ShapeSource 
+              id={x.key}
+              key={x.key}
+              hitbox={{width: 20, height: 20}}
+              onPress={this.onSourceLayerPress}
+              shape={              {
+                "type": "FeatureCollection",
+                "features": [{"type":"Feature","geometry":{"type":"Point","coordinates":[x.location[1], x.location[0]]},
+                "properties":{"name":x.name, "area": x.area, "grade": x.grade, "notes": x.notes}}]
+              }}
+
+              onClick={()=>alert("testing")}
+            >
+              <MapboxGL.SymbolLayer
+                id="symbolLocationSymbols"
+                key={x.key}
+                minZoomLevel={1}
+                style={{
+                  iconImage: marker,
+                  iconAllowOverlap: true,
+                  iconSize: 0.5
+                }}
+              />
+            </MapboxGL.ShapeSource >
+          )}
+        </MapboxGL.MapView>
+        <TouchableOpacity
+          style={styles.add}
+          onPress={() => navigate('Add')}
+        >
+          <Text style={styles.addText}>Add Climb</Text>
+        </TouchableOpacity>
+        
+      </View>
       :
-        <View>
-          <Text>IMAGE HERE: path to downloaded image</Text>
-          <ScrollView>
-            <Text>...</Text>
-          </ScrollView>
-          <Button title="X" onClick={() => this.setState({ showMap : false })}>X</Button>
-        </View>
+        <ScrollView>
+          <View style={styles.brush}>
+            <BrushText
+              image={
+                __DEV__
+                  ? require('../assets/images/BrushCoral.png')
+                  : require('../assets/images/BrushCoral.png')
+              }
+              text={`${popUp.name}, (${popUp.grade})`}
+              fsize={30}
+            />
+          </View>
+          <Image style={{width: 360, height: 350}} source={require('../assets/images/bloody.png')}/>
+          <View style={styles.brushThin}>
+            <BrushText
+              image={
+                __DEV__
+                  ? require('../assets/images/BrushPurp.png')
+                  : require('../assets/images/BrushPurp.png')
+              }
+              text={popUp.area}
+              fsize={30}
+            />
+          </View>
+              <Text>{popUp.notes}</Text>
+          <Button title="Close" onClick={() => this.setState({ showMap : true })}></Button>
+        </ScrollView>
+
     );
   }
 }
@@ -104,6 +169,16 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     ...StyleSheet.absoluteFillObject,
+  },
+  brush: {
+    height: 60,
+    width: 350,
+    resizeMode: 'contain'
+  },
+  brushThin: {
+    height: 40,
+    width: 350,
+    resizeMode: 'contain'
   },
   add: {
     position: 'absolute',//use absolute position to show button on top of the map
@@ -123,3 +198,10 @@ const styles = StyleSheet.create({
     fontSize: 20
   }
 });
+
+
+/*
+
+
+
+*/
