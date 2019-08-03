@@ -68,20 +68,11 @@ export default class DrawClimbScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.container}>
           <View style={styles.sketchContainer}>
-            {/*
+
             <ImageBackground source={require('../assets/images/bloody.png')} style={{width: '100%', height: '100%'}}>
-              <ExpoPixi.Sketch
-                ref={ref => (this.sketch = ref)}
-                style={styles.sketch}
-                strokeColor={this.state.strokeColor}
-                strokeWidth={this.state.strokeWidth}
-                strokeAlpha={1}
-                onChange={this.onChangeAsync}
-                onReady={this.onReady}
-                initialLines={this.state.lines}
-              />
+
             </ImageBackground>
-            */}
+
             <View style={styles.label}>
               <Text>Canvas - draw here</Text>
             </View>

@@ -41,6 +41,8 @@ export default class HomeScreen extends React.Component {
   }
   render() {
     const {navigation} = this.props;
+    const {username} = "Clayton"  //${/*JSON.stringify(this.state.user.displayName, null, 2)*/}
+
     if (!this.state.user) {
       // TODO get login to actually precede app
       return <Login navigation={navigation}/>
@@ -64,14 +66,24 @@ export default class HomeScreen extends React.Component {
               An app for sharing climbs without threatening access.
             </Text>
             <Text style={styles.getStartedText}>
-              {`Welcome ${JSON.stringify(this.state.user.displayName, null, 2)}`}
+              {`Welcome Clayton`}
             </Text>
             { this.state.user &&
-              <Button
-              style={{marginTop: 10}}
-              title="Sign Out"
-              onPress={() => firebase.auth().signOut()} 
-              />
+              <TouchableOpacity
+                onPress={() => firebase.auth().signOut()} 
+              >
+                <View style={styles.brushThin}>
+                  <BrushText
+                    image={
+                      __DEV__
+                        ? require('../assets/images/BrushMaroon.png')
+                        : require('../assets/images/BrushMaroon.png')
+                    }
+                    text="Sign Out"
+                    fsize={30}
+                  />
+                </View>
+              </TouchableOpacity>
             }
           </View>
         </ScrollView>
@@ -89,6 +101,11 @@ const styles = StyleSheet.create({
   },
   brush: {
     height: 90,
+    width: 350,
+    resizeMode: 'contain'
+  },
+  brushThin: {
+    height: 40,
     width: 350,
     resizeMode: 'contain'
   },
